@@ -1,22 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Profile | InfoCascade</title>
+  <link rel="icon" href="/images/Infocascade.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #4e73df;
+      --primary-dark: #3a5bc7;
+      --secondary-color: #2c3e50;
+      --ink: #1f2a37;
+      --muted: #6b7a90;
+      --line: #e6eaf1;
+      --radius: 18px;
+      --shadow: 0 22px 55px -28px rgba(24, 39, 75, 0.32);
+    }
+
+    body {
+      background:
+        radial-gradient(900px 480px at 8% -10%, rgba(78, 115, 223, 0.16), transparent 60%),
+        radial-gradient(760px 460px at 100% 8%, rgba(44, 62, 80, 0.12), transparent 60%),
+        #f5f7fb;
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', Tahoma, sans-serif;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .navbar-brand {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--secondary-color) !important;
+    }
+
+    .navbar .nav-link {
+      color: var(--muted) !important;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .navbar .nav-link.active,
+    .navbar .nav-link:hover {
+      color: var(--primary-color) !important;
+    }
+
+    .profile-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .profile-head {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      padding: 2rem 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .profile-head h4 {
+      font-weight: 800;
+      margin-bottom: 0.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .profile-head p {
+      margin-bottom: 0;
+      opacity: 0.85;
+      font-size: 0.9rem;
+    }
+
+    .info-tile {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.9rem 1rem;
+      background: #fbfcfe;
+      height: 100%;
+    }
+
+    .info-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .info-value {
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .btn-logout {
+      border-radius: 12px;
+      font-weight: 700;
+      padding: 0.7rem 1.4rem;
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-weight: 600;
+      color: var(--secondary-color);
+      padding: 0.7rem 1.4rem;
+      text-decoration: none;
+    }
+
+    .btn-ghost:hover {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
     @media (max-width: 576px) {
-      .profile-actions .btn {
+
+      .profile-actions .btn,
+      .profile-actions .btn-ghost {
         width: 100%;
+        text-align: center;
+      }
+
+      .profile-head {
+        flex-direction: column;
+        text-align: center;
       }
     }
   </style>
 </head>
-<body class="bg-light">
-  <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="/">InfoCascade</a>
+      <a class="navbar-brand" href="/"><i class="fas fa-tower-broadcast me-2 text-primary"></i>InfoCascade</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
         aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -33,28 +176,83 @@
 
   <main class="container py-5">
     <div class="row justify-content-center">
-      <div class="col-lg-7">
-        <div class="card border-0 shadow-sm">
-          <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">My Profile</h4>
-          </div>
-          <div class="card-body">
-            <div class="row g-3">
-              <div class="col-md-6"><strong>Name:</strong> <%= currentUser.name || '-' %></div>
-              <div class="col-md-6"><strong>Email:</strong> <%= currentUser.email || '-' %></div>
-              <div class="col-md-6"><strong>URN:</strong> <%= currentUser.urn || '-' %></div>
-              <div class="col-md-6"><strong>CRN:</strong> <%= currentUser.crn || '-' %></div>
-              <div class="col-md-6"><strong>Department:</strong> <%= currentUser.department || '-' %></div>
-              <div class="col-md-6"><strong>Group:</strong> <%= currentUser.group || '-' %></div>
+      <div class="col-lg-8">
+        <div class="card profile-card">
+          <div class="profile-head">
+            <div class="avatar"><i class="fas fa-user-graduate"></i></div>
+            <div>
+              <h4>
+                <%= currentUser.name || 'Student' %>
+              </h4>
+              <p>
+                <%= currentUser.email || '-' %>
+              </p>
             </div>
-            <div class="profile-actions mt-4">
-              <a href="/logout" class="btn btn-danger">Logout</a>
+          </div>
+          <div class="card-body p-4">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="info-tile">
+                  <div class="info-label">Name</div>
+                  <div class="info-value">
+                    <%= currentUser.name || '-' %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-tile">
+                  <div class="info-label">Email</div>
+                  <div class="info-value">
+                    <%= currentUser.email || '-' %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-tile">
+                  <div class="info-label">URN</div>
+                  <div class="info-value">
+                    <%= currentUser.urn || '-' %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-tile">
+                  <div class="info-label">CRN</div>
+                  <div class="info-value">
+                    <%= currentUser.crn || '-' %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-tile">
+                  <div class="info-label">Department</div>
+                  <div class="info-value">
+                    <%= currentUser.department || '-' %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-tile">
+                  <div class="info-label">Group</div>
+                  <div class="info-value">
+                    <%= currentUser.group || '-' %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-actions mt-4 d-flex flex-column flex-sm-row gap-2">
+              <a href="/timetable" class="btn-ghost"><i class="fas fa-calendar-alt me-2"></i>My Timetable</a>
+              <a href="/logout" class="btn btn-danger btn-logout"><i
+                  class="fas fa-arrow-right-from-bracket me-2"></i>Logout</a>
             </div>
           </div>
         </div>
       </div>
     </div>
   </main>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

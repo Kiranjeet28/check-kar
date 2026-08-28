@@ -3,204 +3,337 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>InfoCascade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfoCascade | College Notices, Results & Timetables</title>
+  <meta name="description"
+    content="InfoCascade delivers trusted and timely college notices, results, fee updates, events and live class timetables in one place." />
   <link rel="icon" href="/images/Infocascade.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
     :root {
-      --primary-color: #3498db;
+      --primary-color: #4e73df;
+      --primary-dark: #3a5bc7;
       --secondary-color: #2c3e50;
       --accent-color: #e74c3c;
+      --ink: #1f2a37;
+      --muted: #6b7a90;
+      --line: #e6eaf1;
+      --radius: 18px;
+      --shadow: 0 22px 55px -28px rgba(24, 39, 75, 0.32);
     }
 
     body {
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(900px 480px at 8% -10%, rgba(78, 115, 223, 0.16), transparent 60%),
+        radial-gradient(760px 460px at 100% 6%, rgba(44, 62, 80, 0.12), transparent 60%),
+        #f5f7fb;
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', Tahoma, sans-serif;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .navbar-brand {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--secondary-color) !important;
+    }
+
+    .navbar .nav-link {
+      color: var(--muted) !important;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .navbar .nav-link.active,
+    .navbar .nav-link:hover {
+      color: var(--primary-color) !important;
     }
 
     .hero-header {
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: white;
-      border-radius: 10px;
-      padding: 2rem;
+      color: #fff;
+      border-radius: 26px;
+      padding: 3.2rem 2rem;
       margin-bottom: 2rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-header::after {
+      content: '';
+      position: absolute;
+      inset: auto -60px -120px auto;
+      width: 320px;
+      height: 320px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+    }
+
+    .hero-header h1 {
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-header p {
+      opacity: 0.88;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+      margin-top: 1.6rem;
+    }
+
+    .btn-hero {
+      border-radius: 999px;
+      padding: 0.7rem 1.4rem;
+      font-weight: 700;
+      background: #fff;
+      color: var(--secondary-color);
+      border: none;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-hero:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -14px rgba(0, 0, 0, 0.5);
+      color: var(--primary-dark);
+    }
+
+    .btn-hero-ghost {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-hero-ghost:hover {
+      background: rgba(255, 255, 255, 0.24);
+      color: #fff;
+    }
+
+    .section-title {
+      font-weight: 800;
+      letter-spacing: -0.02em;
     }
 
     .notice-card {
+      border: 1px solid var(--line);
       border-left: 4px solid var(--primary-color);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      margin-bottom: 1.5rem;
+      border-radius: 16px;
+      background: #fff;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      margin-bottom: 1.25rem;
     }
 
     .notice-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .modal-header {
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: white;
-    }
-
-    .top-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    .btn-subscribe {
-      background-color: #2ecc71;
-      border-color: #2ecc71;
-    }
-
-    .text-accent {
-      color: var(--accent-color);
-    }
-
-    #visitCounter {
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      background: #3498db;
-      color: white;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 14px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    #backToTop {
-      position: fixed;
-      bottom: 60px;
-      right: 20px;
-      display: none;
-      background: #3498db;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 50%;
-      font-size: 18px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-    }
-
-    /* Team & Admin Section (added) */
-    .profile-card {
-      border: none;
-      overflow: hidden;
-      border-radius: 12px;
-      transition: transform .28s ease, box-shadow .28s ease;
-    }
-
-    .profile-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 18px 40px rgba(44, 62, 80, .12);
-    }
-
-    .profile-avatar {
-      width: 140px;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 6px solid #fff;
-      box-shadow: 0 8px 20px rgba(52, 152, 219, .12);
-    }
-
-    .team-section h3 {
-      letter-spacing: .4px;
-    }
-
-    .team-badge {
-      background: linear-gradient(90deg, #3498db, #2c3e50);
-      color: #fff;
-      padding: .35rem .6rem;
-      border-radius: 999px;
-      font-size: .8rem;
-    }
-
-    .social-icon {
-      width: 36px;
-      height: 36px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, .05);
-      color: #2c3e50;
-      margin: 0 .15rem;
-      transition: all .2s;
-    }
-
-    .social-icon:hover {
-      transform: translateY(-3px);
-      background: #3498db;
-      color: #fff;
-    }
-
-    /* Scrollable notices section styles (added) */
-    .scroll-notices-section {
-      background: linear-gradient(180deg, rgba(52,152,219,0.04), rgba(44,62,80,0.02));
-      padding: 2rem 0;
-      border-radius: 10px;
-      margin: 2rem 0;
-    }
-
-    .scroll-notices-wrapper {
-      max-height: 60vh;
-      overflow-y: auto;
-      padding-right: 12px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .scroll-notice-item {
-      background: #fff;
-      border-left: 4px solid var(--primary-color);
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-    .scroll-notice-item:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+      box-shadow: 0 20px 40px -26px rgba(24, 39, 75, 0.55);
     }
 
-    /* custom thin scrollbar */
-    .scroll-notices-wrapper::-webkit-scrollbar { width: 10px; }
-    .scroll-notices-wrapper::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #3498db, #2c3e50);
-      border-radius: 10px;
+    .notice-card .card-title {
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .notice-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
     }
 
     .student-class-card {
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #eef6ff, #ffffff);
-      box-shadow: 0 8px 22px rgba(44, 62, 80, 0.08);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(135deg, #eef4ff, #ffffff);
+      box-shadow: var(--shadow);
       margin-bottom: 1.5rem;
     }
 
     .class-chip {
       display: inline-block;
       border-radius: 999px;
-      padding: 0.15rem 0.6rem;
-      font-size: 0.78rem;
-      font-weight: 700;
-      margin-right: 0.35rem;
-      background: #eaf2fb;
-      color: #2c3e50;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.76rem;
+      font-weight: 800;
+      margin-right: 0.4rem;
+      background: #e5edfb;
+      color: var(--primary-dark);
     }
 
+    .modal-content {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      border-bottom: none;
+    }
+
+    .form-control,
+    .form-select {
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+      padding: 0.7rem 1rem;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      background: #fff;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(78, 115, 223, 0.15);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .text-accent {
+      color: var(--accent-color);
+    }
+
+    /* Team & Admin */
+    .team-section {
+      background: #fff;
+      border-top: 1px solid var(--line);
+    }
+
+    .profile-card {
+      border: 1px solid var(--line);
+      overflow: hidden;
+      border-radius: 18px;
+      background: #fff;
+      transition: transform .28s ease, box-shadow .28s ease;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow);
+    }
+
+    .profile-avatar {
+      width: 132px;
+      height: 132px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 6px solid #fff;
+      box-shadow: 0 10px 24px rgba(78, 115, 223, .18);
+    }
+
+    .team-badge {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      padding: .35rem .75rem;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+
+    .social-icon {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #f2f5fa;
+      color: var(--secondary-color);
+      margin: 0 .15rem;
+      transition: all .2s;
+    }
+
+    .social-icon:hover {
+      transform: translateY(-3px);
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    .timetable-fab {
+      position: fixed;
+      top: 110px;
+      right: 26px;
+      z-index: 1030;
+      border-radius: 999px;
+      padding: 0.7rem 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 16px 32px -16px rgba(78, 115, 223, 0.9);
+    }
+
+    .timetable-fab:hover {
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    #backToTop {
+      position: fixed;
+      bottom: 26px;
+      right: 26px;
+      display: none;
+      background: var(--secondary-color);
+      color: #fff;
+      border: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      font-size: 1rem;
+      box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.6);
+      cursor: pointer;
+      z-index: 1040;
+    }
+
+    footer {
+      background: var(--secondary-color) !important;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+      color: #cfe9ff;
+    }
+
+    @media (max-width: 992px) {
+      .timetable-fab {
+        display: none;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero-header {
+        padding: 2.2rem 1.2rem;
+        border-radius: 20px;
+      }
+    }
   </style>
 </head>
 
-<body class="bg-light">
-  <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="/">InfoCascade</a>
+      <a class="navbar-brand" href="/"><i class="fas fa-tower-broadcast me-2 text-primary"></i>InfoCascade</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
         aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -210,42 +343,48 @@
           <a class="nav-link active" href="/">Home</a>
           <a class="nav-link" href="/timetable">Timetable</a>
           <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#feedbackModal">Feedback</a>
-          <% if (!currentUser) { %>
-            <a class="nav-link" href="/login">Login</a>
-          <% } %>
+          <% if (currentUser) { %>
+            <a class="nav-link" href="/profile">Profile</a>
+            <% } else { %>
+              <a class="nav-link" href="/login">Login</a>
+              <% } %>
         </div>
       </div>
     </div>
   </nav>
 
-
   <!-- Feedback Modal -->
   <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
+        <div class="modal-header">
           <h5 class="modal-title" id="feedbackModalLabel"><i class="fas fa-comment-dots me-2"></i>Submit Feedback</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="feedbackForm" autocomplete="off">
-          <input type="hidden" name="_csrf" id="csrfToken" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+          <input type="hidden" name="_csrf" id="csrfToken"
+            value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
           <div class="modal-body">
             <div class="mb-3">
-              <label for="feedbackTitle" class="form-label">Title</label>
-              <input type="text" class="form-control" id="feedbackTitle" name="title" maxlength="100" required placeholder="Enter a short title">
+              <label for="feedbackTitle" class="form-label fw-semibold">Title</label>
+              <input type="text" class="form-control" id="feedbackTitle" name="title" maxlength="100" required
+                placeholder="Enter a short title">
             </div>
             <div class="mb-3">
-              <label for="feedbackDetails" class="form-label">Details</label>
-              <textarea class="form-control" id="feedbackDetails" name="details" rows="4" maxlength="500" required placeholder="Describe your feedback"></textarea>
+              <label for="feedbackDetails" class="form-label fw-semibold">Details</label>
+              <textarea class="form-control" id="feedbackDetails" name="details" rows="4" maxlength="500" required
+                placeholder="Describe your feedback"></textarea>
             </div>
             <div class="mb-3">
-              <label for="feedbackContact" class="form-label">Contact number (optional)</label>
-              <input type="text" class="form-control" id="feedbackContact" name="contact" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10-digit mobile number, numbers only" title="If provided, enter exactly 10 digits">
+              <label for="feedbackContact" class="form-label fw-semibold">Contact number (optional)</label>
+              <input type="text" class="form-control" id="feedbackContact" name="contact" inputmode="numeric"
+                maxlength="10" autocomplete="tel" placeholder="10-digit mobile number, numbers only"
+                title="If provided, enter exactly 10 digits">
             </div>
-            <div id="feedbackAlert" class="alert d-none" role="alert"></div>
+            <div id="feedbackAlert" class="alert d-none rounded-4" role="alert"></div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-light rounded-3 fw-semibold" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-primary">Submit</button>
           </div>
         </form>
@@ -254,287 +393,145 @@
   </div>
 
   <div class="container py-5">
-
-
-    <!-- Header Section -->
+    <!-- Hero -->
     <div class="hero-header text-center">
-      <h1 class="display-4 fw-bold">Welcome to InfoCascade</h1>
-      <p class="lead">“ InfoCascade is a one-stop source for all important notifications — academic updates, results, fees, events, and more. Join the flow of trusted and timely information.”
-
-</p>
-
+      <h1 class="display-5 fw-bold">Welcome to InfoCascade</h1>
+      <p class="lead">
+        A one-stop source for all important notifications — academic updates, results, fees, events and more.
+        Join the flow of trusted and timely information.
+      </p>
+      <div class="hero-actions">
+        <a href="/timetable" class="btn-hero"><i class="fas fa-calendar-alt me-2"></i>View Timetable</a>
+        <a href="/admin/login" class="btn-hero btn-hero-ghost"><i class="fas fa-lock me-2"></i>Admin Login</a>
+      </div>
     </div>
 
-    <!-- Top Navigation -->
-    <div class="top-nav">
-      <a href="/admin/login" class="btn btn-primary"><i class="fas fa-lock me-1"></i> Admin Login</a>
-    </div>
-
-
-    <!-- Notices Section -->
+    <!-- Live class summary -->
     <% if (currentUser && studentClassSummary) { %>
-      <div class="row mb-3">
+      <div class="row mb-4">
         <div class="col-lg-8 mx-auto">
           <div class="card student-class-card">
-            <div class="card-body">
-              <h5 class="mb-2">
+            <div class="card-body p-4">
+              <h5 class="mb-2 fw-bold">
                 <i class="fas fa-user-clock text-primary me-2"></i>Your Live Class Update
               </h5>
               <div class="small text-muted mb-3">
-                <strong><%= studentClassSummary.departmentLabel %></strong> •
-                Group <strong><%= studentClassSummary.groupName %></strong> •
+                <strong>
+                  <%= studentClassSummary.departmentLabel %>
+                </strong> •
+                Group <strong>
+                  <%= studentClassSummary.groupName %>
+                </strong> •
                 <%= studentClassSummary.dayName %>
               </div>
 
-              <div class="mb-2">
+              <div class="mb-3">
                 <div class="fw-semibold text-secondary mb-1">Present Class</div>
                 <% if (studentClassSummary.presentClass) { %>
-                  <span class="class-chip"><%= studentClassSummary.presentClass.time || '--:--' %></span>
-                  <span>
-                    <%= (studentClassSummary.presentClass.entries && studentClassSummary.presentClass.entries[0] && studentClassSummary.presentClass.entries[0].subject) || (studentClassSummary.presentClass.isFree ? 'Free Period' : 'Class') %>
+                  <span class="class-chip">
+                    <%= studentClassSummary.presentClass.time || '--:--' %>
                   </span>
-                <% } else { %>
-                  <span class="text-muted">No class running right now.</span>
-                <% } %>
+                  <span>
+                    <%= (studentClassSummary.presentClass.entries && studentClassSummary.presentClass.entries[0] &&
+                      studentClassSummary.presentClass.entries[0].subject) || (studentClassSummary.presentClass.isFree
+                      ? 'Free Period' : 'Class' ) %>
+                  </span>
+                  <% } else { %>
+                    <span class="text-muted">No class running right now.</span>
+                    <% } %>
               </div>
 
               <div>
                 <div class="fw-semibold text-secondary mb-1">Next Class</div>
                 <% if (studentClassSummary.nextClass) { %>
-                  <span class="class-chip"><%= studentClassSummary.nextClass.time || '--:--' %></span>
-                  <span>
-                    <%= (studentClassSummary.nextClass.entries && studentClassSummary.nextClass.entries[0] && studentClassSummary.nextClass.entries[0].subject) || (studentClassSummary.nextClass.isFree ? 'Free Period' : 'Class') %>
+                  <span class="class-chip">
+                    <%= studentClassSummary.nextClass.time || '--:--' %>
                   </span>
-                <% } else { %>
-                  <span class="text-muted">No more classes scheduled for today.</span>
-                <% } %>
+                  <span>
+                    <%= (studentClassSummary.nextClass.entries && studentClassSummary.nextClass.entries[0] &&
+                      studentClassSummary.nextClass.entries[0].subject) || (studentClassSummary.nextClass.isFree
+                      ? 'Free Period' : 'Class' ) %>
+                  </span>
+                  <% } else { %>
+                    <span class="text-muted">No more classes scheduled for today.</span>
+                    <% } %>
               </div>
             </div>
           </div>
         </div>
       </div>
-    <% } %>
+      <% } %>
 
-    <div class="row mb-5">
-      <div class="col-lg-8 mx-auto">
-        <h2 class="text-center mb-4"><i class="fas fa-bullhorn text-accent me-2"></i>Latest Updates</h2>
+        <!-- Notices -->
+        <div class="row mb-5">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="section-title text-center mb-4"><i class="fas fa-bullhorn text-accent me-2"></i>Latest Updates
+            </h2>
 
-        <% if (notices.length===0) { %>
-          <div class="alert alert-info text-center">
-            <i class="fas fa-info-circle me-2"></i> No notices available at the moment. Please check back later.
-          </div>
-          <% } else { %>
-            <% notices.forEach(notice=> { %>
-              <div class="card notice-card">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <h5 class="card-title fw-bold"><i class="fas fa-sticky-note text-primary me-2"></i>
-                      <%= notice.title %>
-                    </h5>
-                    
-                  </div>
-                  <div class="card-text mt-2"><%- notice.message %></div>
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <small class="text-muted">
-                      <i class="fas fa-user me-1"></i> Posted by <%= notice.postedBy && notice.postedBy.name ?
-                        notice.postedBy.name : 'Admin' %>
-                    </small>
-                    <small class="text-muted">
-                      <i class="fas fa-calendar-alt me-1"></i>
-                      <%= notice.date ? new Date(notice.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '' %>
-                    </small>
-                  </div>
-                </div>
+            <% if (notices.length===0) { %>
+              <div class="alert alert-info border-0 rounded-4 text-center">
+                <i class="fas fa-info-circle me-2"></i> No notices available at the moment. Please check back later.
               </div>
-              <% }) %>
-                <% } %>
-      </div>
-    </div>
-
+              <% } else { %>
+                <% notices.forEach(notice=> { %>
+                  <div class="card notice-card">
+                    <div class="card-body p-4">
+                      <h5 class="card-title"><i class="fas fa-sticky-note text-primary me-2"></i>
+                        <%= notice.title %>
+                      </h5>
+                      <div class="card-text mt-2"><%- notice.message %></div>
+                      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+                        <span class="notice-meta">
+                          <i class="fas fa-user me-1"></i> Posted by <%= notice.postedBy && notice.postedBy.name ?
+                            notice.postedBy.name : 'Admin' %>
+                        </span>
+                        <span class="notice-meta">
+                          <i class="fas fa-calendar-alt me-1"></i>
+                          <%= notice.date ? new Date(notice.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+                            : '' %>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <% }) %>
+                    <% } %>
+          </div>
+        </div>
   </div>
 
-  <!-- Timetable Aside Button -->
-  <aside style="position:fixed; top:120px; right:30px; z-index:1030;">
-    <a href="/timetable" class="btn btn-info btn-lg shadow">
-      <i class="fas fa-calendar-alt me-2"></i>Timetable
-    </a>
-  </aside>
+  <!-- Timetable quick link -->
+  <a href="/timetable" class="timetable-fab"><i class="fas fa-calendar-alt me-2"></i>Timetable</a>
 
-  <!-- <div id="visitCounter">
-  Visits: <span id="visitCount">0</span>
-</div> -->
-
-
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script>
-    // Feedback form AJAX submission
-    document.addEventListener('DOMContentLoaded', function () {
-      const feedbackForm = document.getElementById('feedbackForm');
-      const feedbackAlert = document.getElementById('feedbackAlert');
-      const feedbackModal = document.getElementById('feedbackModal');
-      if (feedbackForm) {
-        var contactInput = document.getElementById('feedbackContact');
-        if (contactInput) {
-          contactInput.addEventListener('input', function () {
-            var v = contactInput.value.replace(/\D/g, '').slice(0, 10);
-            if (contactInput.value !== v) contactInput.value = v;
-          });
-        }
-        feedbackForm.addEventListener('submit', async function (e) {
-          feedbackAlert.className = 'alert d-none';
-          const title = feedbackForm.title.value.trim();
-          const details = feedbackForm.details.value.trim();
-          const contact = feedbackForm.contact.value.trim();
-          const csrfToken = document.getElementById('csrfToken').value;
-          if (!title || !details) {
-            e.preventDefault();
-            feedbackAlert.className = 'alert alert-danger';
-            feedbackAlert.textContent = 'Please fill in the title and details.';
-            return;
-          }
-          if (contact && !/^\d{10}$/.test(contact)) {
-            e.preventDefault();
-            feedbackAlert.className = 'alert alert-danger';
-            feedbackAlert.textContent = 'Contact number must be exactly 10 digits, numbers only.';
-            return;
-          }
-          try {
-            const res = await fetch('/feedback', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'CSRF-Token': csrfToken
-              },
-              body: JSON.stringify({ title, details, contact })
-            });
-            const json = await res.json();
-            if (res.ok) {
-              feedbackAlert.className = 'alert alert-success';
-              feedbackAlert.textContent = json.message || 'Feedback submitted!';
-              feedbackForm.reset();
-              setTimeout(() => {
-                const modal = bootstrap.Modal.getInstance(feedbackModal);
-                if (modal) modal.hide();
-                feedbackAlert.className = 'alert d-none';
-              }, 1500);
-            } else if (res.status === 429) {
-              feedbackAlert.className = 'alert alert-warning';
-              feedbackAlert.textContent = json.error || 'You have already submitted feedback.';
-            } else {
-              feedbackAlert.className = 'alert alert-danger';
-              feedbackAlert.textContent = json.error || 'Failed to submit feedback.';
-            }
-          } catch (err) {
-            feedbackAlert.className = 'alert alert-danger';
-            feedbackAlert.textContent = 'Network error. Try again later.';
-          }
-        });
-      }
-    });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // Get the current visit count from localStorage
-      let visitCount = localStorage.getItem('visitCount');
-
-      // If no count exists, initialize it to 0
-      if (!visitCount) {
-        visitCount = 0;
-      }
-
-      // Increment the visit count
-      visitCount++;
-
-      // Save the updated count back to localStorage
-      localStorage.setItem('visitCount', visitCount);
-
-      // Display the visit count in the counter
-      const visitCountEl = document.getElementById('visitCount');
-      if (visitCountEl) {
-        visitCountEl.textContent = visitCount;
-      }
-
-      // Back to top button functionality
-      const backToTopBtn = document.getElementById('backToTop');
-      window.onscroll = function () {
-        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-          backToTopBtn.style.display = "block";
-        } else {
-          backToTopBtn.style.display = "none";
-        }
-      };
-
-      backToTopBtn.onclick = function () {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      };
-    });
-  </script>
-  <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const backToTopButton = document.getElementById('backToTop');
-
-    // Show the button when the user scrolls down 100px
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > 100) {
-        backToTopButton.style.display = 'block';
-      } else {
-        backToTopButton.style.display = 'none';
-      }
-    });
-
-    // Scroll to the top when the button is clicked
-    backToTopButton.addEventListener('click', function () {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
-  });
-</script>
-
-  <!-- Team & Admin Section (added) -->
-  <style>
-    .profile-card { border: none; overflow: hidden; border-radius: 12px; transition: transform .28s ease, box-shadow .28s ease; }
-    .profile-card:hover { transform: translateY(-8px); box-shadow: 0 18px 40px rgba(44,62,80,.12); }
-    .profile-avatar { width:140px; height:140px; object-fit:cover; border-radius:50%; border:6px solid #fff; box-shadow: 0 8px 20px rgba(52,152,219,.12); }
-    .team-section h3 { letter-spacing:.4px; }
-    .team-badge { background: linear-gradient(90deg,#3498db,#2c3e50); color:#fff; padding:.35rem .6rem; border-radius:999px; font-size:.8rem; }
-    .social-icon { width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; background:rgba(0,0,0,.05); color:#2c3e50; margin:0 .15rem; transition: all .2s; }
-    .social-icon:hover { transform: translateY(-3px); background: #3498db; color: #fff; }
-  </style>
-
-  <section class="team-section py-5 bg-white">
+  <!-- Team & Admin Section -->
+  <section class="team-section py-5">
     <div class="container">
-      <!-- Admin row -->
       <div class="text-center mb-4">
-        <h3 class="fw-bold">Admin</h3>
-        <p class="text-muted mb-0">Primary administrator — manages notices & announcements</p>
+        <h3 class="section-title">Admin</h3>
+        <p class="text-muted mb-0">Primary administrator — manages notices &amp; announcements</p>
       </div>
 
       <div class="row justify-content-center mb-5">
         <div class="col-12 col-md-6 col-lg-4">
-          <div class="card profile-card text-center p-4 shadow-sm">
-            <!-- replace src with actual admin photo path -->
+          <div class="card profile-card text-center p-4">
             <img src="/images/KaranProfile.png" alt="Admin photo" class="profile-avatar mx-auto d-block mb-3">
             <div class="card-body p-0">
               <h5 class="mb-1 fw-bold">Karan Singh</h5>
               <div class="mb-2"><span class="team-badge">Head Admin • CSE</span></div>
-              <p class="text-muted small mb-3">Responsible for posting official notices and managing user subscriptions.</p>
+              <p class="text-muted small mb-3">Responsible for posting official notices and managing user subscriptions.
+              </p>
               <div>
-                <a href="https://www.linkedin.com/in/karan-singh-36bb6b274/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://www.linkedin.com/in/karan-singh-36bb6b274/" class="social-icon"><i
+                    class="fab fa-linkedin-in"></i></a>
                 <a href="https://github.com/CS4410" class="social-icon"><i class="fab fa-github"></i></a>
-                <a href="mailto: singhkaran91973@gmail.com" class="social-icon"><i class="fas fa-envelope"></i></a>
+                <a href="mailto:singhkaran91973@gmail.com" class="social-icon"><i class="fas fa-envelope"></i></a>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Team row -->
       <div class="text-center mb-4">
-        <h3 class="fw-bold">Our Team</h3>
+        <h3 class="section-title">Our Team</h3>
         <p class="text-muted mb-4">Dedicated team that builds and maintains InfoCascade</p>
       </div>
 
@@ -545,7 +542,7 @@
             <div class="card-body p-0">
               <h6 class="mb-0 fw-bold">Jayant Kumawat</h6>
               <small class="text-muted">(B.Tech-CSE)</small><br>
-              <small class="text-muted">Technical & Communications Specialist</small>
+              <small class="text-muted">Technical &amp; Communications Specialist</small>
             </div>
           </div>
         </div>
@@ -567,247 +564,31 @@
             <div class="card-body p-0">
               <h6 class="mb-0 fw-bold">Abhay Singh</h6>
               <small class="text-muted">(B.Tech-CE)</small><br>
-              <small class="text-muted">Communication & Outreach Coordinator</small>
+              <small class="text-muted">Communication &amp; Outreach Coordinator</small>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <!-- end Team & Admin Section -->
 
+  <button id="backToTop" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
 
-
-
-
-
-
-  
-</body>
-
-
-
-<!-- Contact Us Form (separate title "Contact Us Form") -->
-
-
-<style>
-  /* ===== Contact Section Styling ===== */
-
-#contactUsSection {
-  background: linear-gradient(135deg, #eef2f3, #dfe9f3);
-  padding-top: 70px;
-  padding-bottom: 70px;
-}
-
-/* Card glass effect */
-#contactUsSection .card {
-  border: none;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.75);
-  transition: all 0.4s ease;
-}
-
-#contactUsSection .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-}
-
-/* Heading */
-#contactUsSection h3 {
-  font-size: 2rem;
-  color: #0d6efd;
-  letter-spacing: 1px;
-}
-
-/* Labels */
-#contactUsSection label {
-  font-weight: 600;
-  color: #333;
-}
-
-/* Inputs */
-#contactUsSection input,
-#contactUsSection textarea {
-  border-radius: 12px;
-  border: 1.5px solid #c9c9c9;
-  padding: 10px 14px;
-  font-size: 15px;
-  transition: all 0.3s ease;
-}
-
-#contactUsSection input:focus,
-#contactUsSection textarea:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-}
-
-/* Button */
-#contactUsSection button {
-  padding: 10px 25px;
-  font-size: 16px;
-  border-radius: 12px;
-  transition: 0.3s ease;
-  background: linear-gradient(135deg, #0d6efd, #4ba3ff);
-  border: none;
-}
-
-#contactUsSection button:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, #0b5ed7, #1c7ed6);
-}
-
-/* Alert message */
-#contactFormAlert {
-  border-radius: 12px;
-  font-size: 15px;
-  padding: 12px;
-}
-
-/* Smooth form animations */
-#contactUsSection .form-control {
-  animation: fadeInUp 0.6s ease;
-}
-
-/* Keyframe animation for smooth appearance */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Mobile Optimization */
-@media (max-width: 576px) {
-  #contactUsSection h3 {
-    font-size: 1.6rem;
-  }
-  #contactUsSection .card-body {
-    padding: 1.5rem !important;
-  }
-}
-
-</style>
-
-  <!-- <section id="contactUsSection" class="py-5 bg-light">
-    <div class="container">
-      <div class="text-center mb-4">
-        <h3 class="fw-bold">Contact Us Form</h3>
-        <p class="text-muted mb-0">Have a query? Send us a message — we'll respond as soon as possible.</p>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="card shadow-sm">
-            <div class="card-body p-4">
-              <form id="contactForm" class="row g-3" autocomplete="off">
-                <div class="col-md-6">
-                  <label for="contactName" class="form-label">Name</label>
-                  <input type="text" id="contactName" name="name" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                  <label for="contactEmail" class="form-label">Email</label>
-                  <input type="email" id="contactEmail" name="email" class="form-control" required>
-                </div>
-                <div class="col-12">
-                  <label for="contactMessage" class="form-label">Message</label>
-                  <textarea id="contactMessage" name="message" rows="5" class="form-control" required></textarea>
-                </div>
-
-                <div class="col-12 d-flex justify-content-end">
-                  <button type="submit" class="btn btn-primary">Send Message</button>
-                </div>
-
-                <div class="col-12">
-                  <div id="contactFormAlert" class="alert d-none mb-0" role="alert"></div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
-
-  <!-- end Contact Us Form -->
-  
-
-
-  <script>
-    // contact form JS (keeps behavior local to this page)
-    (function () {
-      const form = document.getElementById('contactForm');
-      const alertEl = document.getElementById('contactFormAlert');
-
-      if (!form) return;
-
-      form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        alertEl.className = 'alert d-none';
-        const data = {
-          name: form.name.value.trim(),
-          email: form.email.value.trim(),
-          message: form.message.value.trim()
-        };
-        if (!data.name || !data.email || !data.message) {
-          alertEl.className = 'alert alert-danger';
-          alertEl.textContent = 'Please fill all fields.';
-          return;
-        }
-
-        try {
-          const res = await fetch('/contact', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
-
-          const json = await res.json();
-          if (res.ok) {
-            alertEl.className = 'alert alert-success';
-            alertEl.textContent = json.message || 'Message sent. Thank you!';
-            form.reset();
-          } else {
-            alertEl.className = 'alert alert-danger';
-            alertEl.textContent = json.error || 'Failed to send message. Try later.';
-          }
-        } catch (err) {
-          alertEl.className = 'alert alert-danger';
-          alertEl.textContent = 'Network error. Try again later.';
-        }
-      });
-    })();
-  </script>
-
-
-
- <a href='http://www.freevisitorcounters.com'>Free counter</a> <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=0896f89e9cd1afc545066147603ad3ac36fbfd80'></script>
-<script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1383063/t/10"></script>
-
-  <button id="backToTop">
-  <i class="fas fa-arrow-up"></i>
-</button>
-
-
-<!-- 
-  <footer class="bg-dark text-white text-center py-3 mt-5">
-    <div class="container">
-      <p class="mb-0">© 2025 InfoCascade - Jai Hoo Satnaryan.</p>
-       <p class="mb-0">Designed and Developed by Karan Singh.</p>
-    </div>
-  </footer> -->
-  
-
-<footer class="bg-dark text-white pt-5 pb-4 mt-5">
+  <footer class="text-white pt-5 pb-4">
     <div class="container">
       <div class="row gy-4">
         <div class="col-md-4">
           <h5 class="fw-bold mb-3">InfoCascade</h5>
-          <p class="small text-muted">
+          <p class="small text-white-50">
             InfoCascade delivers trusted and timely college notices — academics, events, results and more.
           </p>
           <div class="d-flex gap-2 mt-3">
-            <a href="https://www.linkedin.com" target="_blank" class="btn btn-outline-light btn-sm"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://github.com" target="_blank" class="btn btn-outline-light btn-sm"><i class="fab fa-github"></i></a>
-            <a href="mailto:infocascade.gndec@gmail.com" class="btn btn-outline-light btn-sm"><i class="fas fa-envelope"></i></a>
+            <a href="https://www.linkedin.com" target="_blank" class="btn btn-outline-light btn-sm"><i
+                class="fab fa-linkedin-in"></i></a>
+            <a href="https://github.com" target="_blank" class="btn btn-outline-light btn-sm"><i
+                class="fab fa-github"></i></a>
+            <a href="mailto:infocascade.gndec@gmail.com" class="btn btn-outline-light btn-sm"><i
+                class="fas fa-envelope"></i></a>
           </div>
         </div>
 
@@ -815,42 +596,118 @@
           <h6 class="fw-semibold">Quick Links</h6>
           <ul class="list-unstyled small">
             <li><a href="/" class="text-white text-decoration-none">Home</a></li>
+            <li><a href="/timetable" class="text-white text-decoration-none">Timetable</a></li>
             <li><a href="/admin/login" class="text-white text-decoration-none">Admin Login</a></li>
             <li><a href="#" class="text-white text-decoration-none">Privacy Policy</a></li>
-            <li><a href="#" class="text-white text-decoration-none">Terms</a></li>
           </ul>
         </div>
 
         <div class="col-md-4">
           <h6 class="fw-semibold">Contact Us</h6>
-          <p class="small mb-1"><i class="fas fa-envelope me-2"></i><a href="mailto:infocascade.gndec@gmail.com" class="text-white text-decoration-none">infocascade.gndec@gmail.com</a></p>
-          <p class="small mb-3"><i class="fas fa-phone me-2"></i><a href="tel:+919906108715" class="text-white text-decoration-none">+91 99061 08715</a></p>
-
-          <div id="footerSubMsg" class="mt-2 small" style="display:none;"></div>
+          <p class="small mb-1"><i class="fas fa-envelope me-2"></i><a href="mailto:infocascade.gndec@gmail.com"
+              class="text-white text-decoration-none">infocascade.gndec@gmail.com</a></p>
+          <p class="small mb-3"><i class="fas fa-phone me-2"></i><a href="tel:+919906108715"
+              class="text-white text-decoration-none">+91 99061 08715</a></p>
         </div>
       </div>
 
       <hr class="border-light my-4">
 
-      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
         <small class="text-white">© <span id="currentYear"></span> InfoCascade. All rights reserved.</small>
         <div class="d-flex align-items-center gap-3">
-          <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+          <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal">
             <i class="fas fa-comment-dots me-1"></i> Feedback
           </button>
-          <small class="text-white mb-0">Designed & Developed by Karan Singh</small>
+          <small class="text-white mb-0">Designed &amp; Developed by Karan Singh</small>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- Footer styles + small script (kept local and minimal) -->
-  <style>
-    footer a:hover { text-decoration: underline; color: #cfe9ff; }
-    @media (max-width: 576px) {
-      .top-nav { flex-direction: column; gap: .75rem; }
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Feedback form AJAX submission
+    document.addEventListener('DOMContentLoaded', function () {
+      const feedbackForm = document.getElementById('feedbackForm');
+      const feedbackAlert = document.getElementById('feedbackAlert');
+      const feedbackModal = document.getElementById('feedbackModal');
+      if (feedbackForm) {
+        var contactInput = document.getElementById('feedbackContact');
+        if (contactInput) {
+          contactInput.addEventListener('input', function () {
+            var v = contactInput.value.replace(/\D/g, '').slice(0, 10);
+            if (contactInput.value !== v) contactInput.value = v;
+          });
+        }
+        feedbackForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          feedbackAlert.className = 'alert d-none rounded-4';
+          const title = feedbackForm.title.value.trim();
+          const details = feedbackForm.details.value.trim();
+          const contact = feedbackForm.contact.value.trim();
+          const csrfToken = document.getElementById('csrfToken').value;
+          if (!title || !details) {
+            feedbackAlert.className = 'alert alert-danger rounded-4';
+            feedbackAlert.textContent = 'Please fill in the title and details.';
+            return;
+          }
+          if (contact && !/^\d{10}$/.test(contact)) {
+            feedbackAlert.className = 'alert alert-danger rounded-4';
+            feedbackAlert.textContent = 'Contact number must be exactly 10 digits, numbers only.';
+            return;
+          }
+          try {
+            const res = await fetch('/feedback', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'CSRF-Token': csrfToken
+              },
+              body: JSON.stringify({ title, details, contact })
+            });
+            const json = await res.json();
+            if (res.ok) {
+              feedbackAlert.className = 'alert alert-success rounded-4';
+              feedbackAlert.textContent = json.message || 'Feedback submitted!';
+              feedbackForm.reset();
+              setTimeout(() => {
+                const modal = bootstrap.Modal.getInstance(feedbackModal);
+                if (modal) modal.hide();
+                feedbackAlert.className = 'alert d-none rounded-4';
+              }, 1500);
+            } else if (res.status === 429) {
+              feedbackAlert.className = 'alert alert-warning rounded-4';
+              feedbackAlert.textContent = json.error || 'You have already submitted feedback.';
+            } else {
+              feedbackAlert.className = 'alert alert-danger rounded-4';
+              feedbackAlert.textContent = json.error || 'Failed to submit feedback.';
+            }
+          } catch (err) {
+            feedbackAlert.className = 'alert alert-danger rounded-4';
+            feedbackAlert.textContent = 'Network error. Try again later.';
+          }
+        });
+      }
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const yearEl = document.getElementById('currentYear');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+      const backToTopButton = document.getElementById('backToTop');
+      if (!backToTopButton) return;
+
+      window.addEventListener('scroll', function () {
+        backToTopButton.style.display = window.scrollY > 150 ? 'block' : 'none';
+      });
+
+      backToTopButton.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
 
 </html>

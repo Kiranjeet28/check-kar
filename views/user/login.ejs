@@ -1,135 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Student Login | InfoCascade</title>
+  <link rel="icon" href="/images/Infocascade.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #4e73df;
+      --primary-dark: #3a5bc7;
+      --secondary-color: #2c3e50;
+      --ink: #1f2a37;
+      --muted: #6b7a90;
+      --line: #e6eaf1;
+      --radius: 18px;
+      --shadow-lg: 0 24px 60px -24px rgba(24, 39, 75, 0.35);
+    }
+
     body {
-      background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+      background:
+        radial-gradient(900px 500px at 12% -10%, rgba(78, 115, 223, 0.18), transparent 60%),
+        radial-gradient(800px 480px at 100% 110%, rgba(44, 62, 80, 0.16), transparent 60%),
+        #f5f7fb;
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', Tahoma, sans-serif;
+      color: var(--ink);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .home-btn {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      z-index: 1000;
+      border-radius: 999px;
+      padding: 0.5rem 1.1rem;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--secondary-color);
+      backdrop-filter: blur(8px);
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .home-btn:hover {
+      background: #fff;
+      color: var(--primary-color);
+      transform: translateX(-2px);
+    }
+
+    .login-card {
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      text-align: center;
+      padding: 2.4rem 2rem;
+      border-bottom: none;
+    }
+
+    .brand-badge {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1rem;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: rgba(255, 255, 255, 0.16);
+      font-size: 1.35rem;
     }
-    .login-card {
-      border: none;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(44, 62, 80, 0.15);
-      overflow: hidden;
-      transition: transform 0.3s;
-      background: #fff;
+
+    .card-header h3 {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
     }
-    .login-card:hover {
-      transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 16px 40px rgba(44, 62, 80, 0.18);
+
+    .card-header p {
+      opacity: 0.82;
+      font-size: 0.92rem;
+      margin-bottom: 0;
     }
-    .card-header {
-      background: linear-gradient(135deg, #3498db, #2c3e50);
-      color: white;
-      text-align: center;
-      padding: 2rem 1rem 1rem 1rem;
-      border-bottom: none;
-    }
+
     .card-body {
-      padding: 2rem 2.5rem 2.5rem 2.5rem;
+      padding: 2.25rem 2rem 2rem;
     }
+
     .form-label {
       font-weight: 600;
-      color: #2c3e50;
+      font-size: 0.85rem;
+      color: var(--secondary-color);
+      margin-bottom: 0.45rem;
     }
+
     .form-control {
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      border: 1.5px solid #dbeafe;
-      font-size: 1rem;
-      background: #f8fafc;
-      transition: border-color 0.2s;
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
     }
+
     .form-control:focus {
-      border-color: #3498db;
-      box-shadow: 0 0 0 0.15rem rgba(52, 152, 219, 0.15);
+      background: #fff;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(78, 115, 223, 0.15);
     }
+
+    .input-group .form-control {
+      border-radius: 12px 0 0 12px;
+    }
+
+    .input-group .btn-outline-secondary {
+      border-color: var(--line);
+      border-radius: 0 12px 12px 0;
+      color: var(--muted);
+    }
+
     .btn-primary {
-      background: linear-gradient(90deg, #3498db, #2c3e50);
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
       border: none;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      padding: 0.75rem;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.08);
-      transition: background 0.2s;
+      padding: 0.85rem;
+      border-radius: 12px;
+      font-weight: 700;
+      box-shadow: 0 12px 24px -12px rgba(78, 115, 223, 0.75);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .btn-primary:hover {
-      background: linear-gradient(90deg, #2c3e50, #3498db);
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px -12px rgba(78, 115, 223, 0.85);
     }
-    .login-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      color: #fff;
-      text-shadow: 0 2px 8px rgba(44,62,80,0.12);
-    }
+
     .register-link {
-      color: #3498db;
-      font-weight: 500;
+      color: var(--primary-color);
+      font-weight: 600;
       text-decoration: none;
-      transition: color 0.2s;
     }
+
     .register-link:hover {
-      color: #2c3e50;
       text-decoration: underline;
     }
+
     .feedback {
-      min-height: 24px;
-      font-size: 1rem;
-      margin-top: 0.5rem;
+      min-height: 22px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-top: 0.6rem;
       text-align: center;
     }
+
+    .secure-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 1.1rem;
+    }
+
     @media (max-width: 600px) {
-      .card-body { padding: 1.2rem; }
+      .card-body {
+        padding: 1.4rem;
+      }
     }
   </style>
 </head>
+
 <body>
+  <a href="/" class="home-btn"><i class="fas fa-arrow-left me-2"></i>Back to Home</a>
+
   <main class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
     <div class="col-12 col-sm-10 col-md-7 col-lg-5">
       <div class="card login-card">
         <div class="card-header">
-          <div class="login-icon"><i class="fas fa-user-graduate"></i></div>
-          <h3 class="mb-0">Student Login</h3>
-          <p class="mb-0" style="font-size:1rem;opacity:0.85;">Access your InfoCascade account</p>
+          <div class="brand-badge"><i class="fas fa-user-graduate"></i></div>
+          <h3>Student Login</h3>
+          <p>Access your InfoCascade account</p>
         </div>
         <div class="card-body">
           <form id="loginForm" autocomplete="on">
             <input type="hidden" id="csrfToken" value="<%= csrfToken %>" />
             <div class="mb-3">
               <label for="email" class="form-label">Email (Gmail)</label>
-              <input type="email" class="form-control" id="email" name="email" required autocomplete="username" maxlength="254" title="Use a valid Gmail address (@gmail.com)" />
+              <input type="email" class="form-control" id="email" name="email" placeholder="you@gmail.com" required
+                autocomplete="username" maxlength="254" title="Use a valid Gmail address (@gmail.com)" />
             </div>
-            <div class="mb-3">
+            <div class="mb-4">
               <label for="password" class="form-label">Password</label>
               <div class="input-group">
-                <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password" />
-                <button class="btn btn-outline-secondary" type="button" id="togglePassword" tabindex="-1" aria-label="Show password"><i class="fas fa-eye"></i></button>
+                <input type="password" class="form-control" id="password" name="password" placeholder="••••••••"
+                  required autocomplete="current-password" />
+                <button class="btn btn-outline-secondary" type="button" id="togglePassword" tabindex="-1"
+                  aria-label="Show password"><i class="fas fa-eye"></i></button>
               </div>
             </div>
             <button type="submit" class="btn btn-primary w-100" id="loginBtn">
-              <span id="loginBtnText">Login</span>
-              <span id="loginSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+              <span id="loginBtnText"><i class="fas fa-sign-in-alt me-2"></i>Login</span>
+              <span id="loginSpinner" class="spinner-border spinner-border-sm d-none" role="status"
+                aria-hidden="true"></span>
             </button>
           </form>
           <div id="loginError" class="feedback text-danger"></div>
           <div id="loginSuccess" class="feedback text-success"></div>
-          <div class="mt-3 text-center">
+          <div class="mt-2 text-center">
             <a href="/register" class="register-link">Don't have an account? Register</a>
           </div>
+          <p class="secure-note"><i class="fas fa-shield-halved me-1"></i>Protected session · expires after inactivity
+          </p>
         </div>
       </div>
     </div>
   </main>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     function isValidGmailAddress(email) {
@@ -161,7 +258,7 @@
       }
     });
 
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
       e.preventDefault();
       var emailInput = document.getElementById('email').value.trim();
       var email = emailInput.toLowerCase();
@@ -201,9 +298,10 @@
         errorDiv.textContent = 'Network error.';
       }
       btn.disabled = false;
-      btnText.textContent = 'Login';
+      btnText.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Login';
       spinner.classList.add('d-none');
     });
   </script>
 </body>
+
 </html>

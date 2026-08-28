@@ -1,120 +1,388 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard | InfoCascade</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --primary-color: #4e73df;
+      --primary-dark: #3a5bc7;
       --secondary-color: #2c3e50;
       --accent-color: #e74c3c;
-      --light-bg: #f8f9fa;
+      --warning-color: #f6c23e;
+      --ink: #1f2a37;
+      --muted: #6b7a90;
+      --line: #e6eaf1;
+      --radius: 18px;
+      --shadow-sm: 0 6px 20px -10px rgba(24, 39, 75, 0.28);
+      --shadow-lg: 0 24px 60px -28px rgba(24, 39, 75, 0.4);
     }
-    
+
     body {
-      background-color: var(--light-bg);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(900px 460px at 100% -8%, rgba(78, 115, 223, 0.14), transparent 60%),
+        #f5f7fb;
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', Tahoma, sans-serif;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
     }
-    
+
+    h2,
+    h4,
+    h5 {
+      letter-spacing: -0.02em;
+      font-weight: 700;
+    }
+
     .admin-header {
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: white;
-      padding: 1.5rem;
-      border-radius: 10px;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    
-    .notice-form {
-      background-color: white;
-      border-radius: 10px;
-      padding: 2rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-    
-    .notice-card {
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      color: #fff;
+      padding: 1.75rem 2rem;
+      border-radius: var(--radius);
       margin-bottom: 1.5rem;
-      border-left: 4px solid var(--primary-color);
-      transition: transform 0.3s ease;
+      box-shadow: var(--shadow-lg);
     }
-    
+
+    .admin-header h2 {
+      margin-bottom: 0.15rem;
+      font-weight: 800;
+    }
+
+    .admin-header p {
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    .header-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.16);
+      font-size: 1.25rem;
+    }
+
+    .btn-light {
+      border-radius: 999px;
+      font-weight: 600;
+      padding: 0.55rem 1.25rem;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #fff;
+    }
+
+    .btn-light:hover {
+      background: rgba(255, 255, 255, 0.28);
+      color: #fff;
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.15rem 1.25rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      height: 100%;
+    }
+
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(78, 115, 223, 0.12);
+      color: var(--primary-color);
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--secondary-color);
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .notice-form,
+    .panel {
+      background-color: #fff;
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--line);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--secondary-color);
+    }
+
+    .section-title i {
+      color: var(--primary-color);
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--secondary-color);
+    }
+
+    .form-control {
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    .form-control:focus {
+      background: #fff;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(78, 115, 223, 0.15);
+    }
+
+    .notice-card {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1rem;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--primary-color);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
     .notice-card:hover {
       transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
     }
-    
+
+    .notice-card h5 {
+      color: var(--secondary-color);
+    }
+
     .btn-primary {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
-      padding: 0.5rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      border: none;
+      padding: 0.7rem 1.6rem;
+      border-radius: 12px;
+      font-weight: 700;
+      box-shadow: 0 12px 24px -14px rgba(78, 115, 223, 0.85);
     }
-    
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+    }
+
     .btn-danger {
       background-color: var(--accent-color);
       border-color: var(--accent-color);
     }
-    
+
     .btn-warning {
-      background-color: #f6c23e;
-      border-color: #f6c23e;
+      background-color: var(--warning-color);
+      border-color: var(--warning-color);
       color: #212529;
     }
-    
+
+    .btn-sm {
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .btn-secondary,
+    .btn-info {
+      border-radius: 999px;
+      font-weight: 600;
+      padding: 0.55rem 1.25rem;
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+    }
+
+    .btn-info {
+      background-color: #fff;
+      border: 1px solid var(--line);
+      color: var(--secondary-color);
+    }
+
+    .btn-info:hover {
+      background-color: #f2f5fb;
+      color: var(--primary-color);
+    }
+
     .divider {
-      border-top: 2px dashed #dee2e6;
-      margin: 2rem 0;
-      opacity: 0.5;
+      border-top: 2px dashed var(--line);
+      margin: 2.25rem 0;
     }
-    
+
     .action-buttons {
-      min-width: 180px;
+      min-width: 190px;
       text-align: right;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
     }
-    
+
     .notice-date {
-      font-size: 0.85rem;
-      color: #6c757d;
+      font-size: 0.8rem;
+      color: var(--muted);
     }
-    
+
+    .notice-date i {
+      color: var(--primary-color);
+    }
+
     textarea.form-control {
       min-height: 150px;
     }
+
+    #editorContainer {
+      background: #fff;
+      border: 1px solid var(--line) !important;
+      border-radius: 0 0 12px 12px !important;
+    }
+
+    .ql-toolbar.ql-snow {
+      border: 1px solid var(--line) !important;
+      border-radius: 12px 12px 0 0;
+      background: #fbfcfe;
+    }
+
+    .table {
+      --bs-table-bg: #fff;
+      margin-bottom: 0;
+    }
+
+    .table> :not(caption)>*>* {
+      padding: 0.8rem 0.9rem;
+    }
+
+    .table thead th {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      background: #f4f6fb;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .table-bordered {
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .alert-info {
+      background: rgba(78, 115, 223, 0.08);
+      border: 1px solid rgba(78, 115, 223, 0.18);
+      color: var(--secondary-color);
+      border-radius: 14px;
+      font-weight: 500;
+    }
+
+    footer {
+      background: var(--secondary-color) !important;
+      border-radius: 18px 18px 0 0;
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      opacity: 0.85;
+    }
   </style>
 </head>
+
 <body>
 
   <div class="container py-5">
     <!-- Admin Header -->
-    <div class="admin-header d-flex justify-content-between align-items-center">
-      <div>
-        <h2 class="mb-0"><i class="fas fa-user-shield me-2"></i>Welcome <%= admin.name %></h2>
-        <p class="mb-0">Admin Dashboard</p>
+    <div class="admin-header d-flex flex-wrap gap-3 justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <div class="header-badge"><i class="fas fa-user-shield"></i></div>
+        <div>
+          <h2 class="mb-0">Welcome <%= admin.name %>
+          </h2>
+          <p class="mb-0">Admin Dashboard · InfoCascade</p>
+        </div>
       </div>
-          <!-- Feedback Section -->
-         
       <a href="/admin/logout" class="btn btn-light">
         <i class="fas fa-sign-out-alt me-1"></i>Logout
       </a>
     </div>
 
+    <!-- Quick stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-bullhorn"></i></div>
+          <div>
+            <div class="stat-value">
+              <%= notices ? notices.length : 0 %>
+            </div>
+            <div class="stat-label">Notices posted</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-users"></i></div>
+          <div>
+            <div class="stat-value">
+              <%= users ? users.length : 0 %>
+            </div>
+            <div class="stat-label">Subscribed users</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-comment-dots"></i></div>
+          <div>
+            <div class="stat-value">
+              <%= feedbacks ? feedbacks.length : 0 %>
+            </div>
+            <div class="stat-label">Feedback received</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Post New Notice Card -->
     <div class="notice-form">
-      <h4 class="mb-4"><i class="fas fa-plus-circle me-2"></i>Post New Notice</h4>
+      <h4 class="section-title mb-4"><i class="fas fa-plus-circle"></i>Post New Notice</h4>
       <form action="/admin/post-notice" method="POST">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <div class="mb-3">
-          <label class="form-label fw-bold">Notice Title</label>
+          <label class="form-label">Notice Title</label>
           <input type="text" name="title" class="form-control" placeholder="Enter notice title" required />
         </div>
         <div class="mb-4">
-          <label class="form-label fw-bold">Notice Content</label>
-          <div id="editorContainer" style="height: 300px; background: white; border: 1px solid #ccc; border-radius: 4px;"></div>
+          <label class="form-label">Notice Content</label>
+          <div id="editorContainer" style="height: 300px;"></div>
           <input type="hidden" name="content" id="contentInput">
         </div>
         <button type="submit" class="btn btn-primary">
@@ -127,102 +395,122 @@
 
     <!-- Recent Notices Section -->
     <div class="recent-notices">
-      <h4 class="mb-4"><i class="fas fa-history me-2"></i>Recently Posted Notices</h4>
-      
-      <% if (notices && notices.length === 0) { %>
+      <h4 class="section-title mb-4"><i class="fas fa-history"></i>Recently Posted Notices</h4>
+
+      <% if (notices && notices.length===0) { %>
         <div class="alert alert-info">
           <i class="fas fa-info-circle me-2"></i>No notices have been posted yet.
         </div>
-      <% } else { %>
-        <div class="notice-list">
-          <% notices.forEach(notice => { %>
-            <div class="notice-card p-4 mb-3">
-              <div class="d-flex justify-content-between">
-                <div class="w-75">
-                  <h5 class="fw-bold mb-2"><%= notice.title %></h5>
-                  <div class="mb-3"><%- notice.message %></div>
-                  <div class="notice-date">
-                    <i class="fas fa-user me-1"></i>
-                    Posted by <%= notice.postedBy && notice.postedBy.name ? notice.postedBy.name : 'Admin' %> 
-                    <i class="fas fa-calendar-alt ms-2 me-1"></i>
-                    <%= notice.date ? new Date(notice.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '' %>
+        <% } else { %>
+          <div class="notice-list">
+            <% notices.forEach(notice=> { %>
+              <div class="notice-card p-4 mb-3">
+                <div class="d-flex flex-wrap gap-3 justify-content-between">
+                  <div class="flex-grow-1" style="min-width: 260px;">
+                    <h5 class="fw-bold mb-2">
+                      <%= notice.title %>
+                    </h5>
+                    <div class="mb-3"><%- notice.message %></div>
+                    <div class="notice-date">
+                      <i class="fas fa-user me-1"></i>
+                      Posted by <%= notice.postedBy && notice.postedBy.name ? notice.postedBy.name : 'Admin' %>
+                        <i class="fas fa-calendar-alt ms-3 me-1"></i>
+                        <%= notice.date ? new Date(notice.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+                          : '' %>
+                    </div>
+                  </div>
+                  <div class="action-buttons">
+                    <a href="/admin/edit-notice/<%= notice._id %>" class="btn btn-warning btn-sm">
+                      <i class="fas fa-edit me-1"></i>Edit
+                    </a>
+                    <form action="/admin/delete-notice/<%= notice._id %>" method="POST"
+                      onsubmit="return confirm('Are you sure you want to delete this notice?');" class="d-inline">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt me-1"></i>Delete
+                      </button>
+                    </form>
                   </div>
                 </div>
-                <div class="action-buttons">
-                  <a href="/admin/edit-notice/<%= notice._id %>" class="btn btn-warning btn-sm">
-                    <i class="fas fa-edit me-1"></i>Edit
-                  </a>
-                  <form action="/admin/delete-notice/<%= notice._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this notice?');" class="d-inline">
-                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <button type="submit" class="btn btn-danger btn-sm">
-                      <i class="fas fa-trash-alt me-1"></i>Delete
-                    </button>
-                  </form>
-                </div>
               </div>
-            </div>
-          <% }) %>
-        </div>
-      <% } %>
+              <% }) %>
+          </div>
+          <% } %>
     </div>
 
     <!-- View All Users & Feedback Table Buttons -->
-    <div class="mb-4 d-flex gap-2">
-      <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#usersTable" aria-expanded="false" aria-controls="usersTable">
+    <div class="mt-4 mb-4 d-flex flex-wrap gap-2">
+      <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#usersTable"
+        aria-expanded="false" aria-controls="usersTable">
         <i class="fas fa-users me-1"></i> View All Users
       </button>
-      <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#feedbackTableCollapse" aria-expanded="false" aria-controls="feedbackTableCollapse">
+      <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#feedbackTableCollapse"
+        aria-expanded="false" aria-controls="feedbackTableCollapse">
         <i class="fas fa-table me-1"></i> View Feedback Table
       </button>
     </div>
 
-    <!-- Feedback Table (Collapsed by default, moved here) -->
+    <!-- Feedback Table (Collapsed by default) -->
     <div class="collapse" id="feedbackTableCollapse">
-      <% if (feedbacks && feedbacks.length === 0) { %>
-        <div class="alert alert-info">
-          <i class="fas fa-info-circle me-2"></i>No feedback has been submitted yet.
-        </div>
-      <% } else { %>
-        <div class="table-responsive">
-          <table class="table table-bordered align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Details</th>
-                <th>Contact</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% feedbacks.forEach((feedback, idx) => { %>
-                <tr>
-                  <td><%= idx + 1 %></td>
-                  <td><%= feedback.title %></td>
-                  <td><%= feedback.details %></td>
-                  <td><%= feedback.contact || '-' %></td>
-                  <td><%= feedback.createdAt ? new Date(feedback.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '' %></td>
-                </tr>
-              <% }) %>
-            </tbody>
-          </table>
-        </div>
-      <% } %>
+      <div class="panel">
+        <h5 class="section-title mb-3"><i class="fas fa-comment-dots"></i>Feedback</h5>
+        <% if (feedbacks && feedbacks.length===0) { %>
+          <div class="alert alert-info mb-0">
+            <i class="fas fa-info-circle me-2"></i>No feedback has been submitted yet.
+          </div>
+          <% } else { %>
+            <div class="table-responsive">
+              <table class="table table-bordered align-middle">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Details</th>
+                    <th>Contact</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% feedbacks.forEach((feedback, idx)=> { %>
+                    <tr>
+                      <td>
+                        <%= idx + 1 %>
+                      </td>
+                      <td class="fw-semibold">
+                        <%= feedback.title %>
+                      </td>
+                      <td>
+                        <%= feedback.details %>
+                      </td>
+                      <td>
+                        <%= feedback.contact || '-' %>
+                      </td>
+                      <td>
+                        <%= feedback.createdAt ? new Date(feedback.createdAt).toLocaleString('en-IN', {
+                          timeZone: 'Asia/Kolkata' }) : '' %>
+                      </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+              </table>
+            </div>
+            <% } %>
+      </div>
     </div>
 
     <!-- Users Table (Collapsed by default) -->
     <div class="collapse" id="usersTable">
-      <div class="card card-body">
-        <h5 class="mb-3"><i class="fas fa-users me-2"></i>Registered Users</h5>
-        
+      <div class="panel">
+        <h5 class="section-title mb-3"><i class="fas fa-users"></i>Registered Users</h5>
+
         <!-- Filter Users -->
         <div class="mb-3">
           <input type="text" id="userFilterInput" class="form-control" placeholder="Search by name or email...">
         </div>
-        
+
         <div class="table-responsive">
           <table class="table table-bordered align-middle">
-            <thead class="table-light">
+            <thead>
               <tr>
                 <th>S.No.</th>
                 <th>Name</th>
@@ -238,20 +526,42 @@
               </tr>
             </thead>
             <tbody>
-              <% users.forEach((user, idx) => { %>
+              <% users.forEach((user, idx)=> { %>
                 <tr>
-                  <td><%= idx + 1 %></td>
-                  <td><%= user.name %></td>
-                  <td><%= user.email %></td>
-                  <td><%= user.department || '-' %></td>
-                  <td><%= user.group || '-' %></td>
-                  <td><%= user.branch %></td>
-                  <td><%= user.year %></td>
-                  <td><%= user.urn %></td>
-                  <td><%= user.crn %></td>
-                  <td><%= user.subscribedAt ? new Date(user.subscribedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '' %></td>
                   <td>
-                    <form action="/admin/remove-user/<%= user._id %>" method="POST" onsubmit="return confirm('Are you sure you want to remove this user?');">
+                    <%= idx + 1 %>
+                  </td>
+                  <td class="fw-semibold">
+                    <%= user.name %>
+                  </td>
+                  <td>
+                    <%= user.email %>
+                  </td>
+                  <td>
+                    <%= user.department || '-' %>
+                  </td>
+                  <td>
+                    <%= user.group || '-' %>
+                  </td>
+                  <td>
+                    <%= user.branch %>
+                  </td>
+                  <td>
+                    <%= user.year %>
+                  </td>
+                  <td>
+                    <%= user.urn %>
+                  </td>
+                  <td>
+                    <%= user.crn %>
+                  </td>
+                  <td>
+                    <%= user.subscribedAt ? new Date(user.subscribedAt).toLocaleString('en-IN', {
+                      timeZone: 'Asia/Kolkata' }) : '' %>
+                  </td>
+                  <td>
+                    <form action="/admin/remove-user/<%= user._id %>" method="POST"
+                      onsubmit="return confirm('Are you sure you want to remove this user?');">
                       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                       <button type="submit" class="btn btn-danger btn-sm">
                         <i class="fas fa-user-times me-1"></i>Remove
@@ -259,7 +569,7 @@
                     </form>
                   </td>
                 </tr>
-              <% }) %>
+                <% }) %>
             </tbody>
           </table>
         </div>
@@ -271,13 +581,15 @@
   <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      // Filter users table by name or email
       const filterInput = document.getElementById('userFilterInput');
       if (filterInput) {
         filterInput.addEventListener('input', function () {
-          const filter = filterInput.value.toLowerCase();
-          document.querySelectorAll('#usersTable tbody tr').forEach(row => {
-            const name = row.children[1].textContent.toLowerCase();
-            const email = row.children[2].textContent.toLowerCase();
+          const filter = this.value.toLowerCase();
+          const rows = document.querySelectorAll('#usersTable tbody tr');
+          rows.forEach(row => {
+            const name = (row.children[1]?.textContent || '').toLowerCase();
+            const email = (row.children[2]?.textContent || '').toLowerCase();
             if (name.includes(filter) || email.includes(filter)) {
               row.style.display = '';
             } else {
@@ -292,28 +604,28 @@
         theme: 'snow',
         modules: {
           toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],        // text formatting
-            ['blockquote', 'code-block'],                      // block formatting
-            [{ 'header': 1 }, { 'header': 2 }],               // headers
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],     // lists
-            ['link', 'image'],                                 // links & images
-            ['clean']                                          // remove formatting
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link', 'image'],
+            ['clean']
           ]
         },
         placeholder: 'Enter notice content with formatting...'
       });
 
       // Before form submit, populate hidden input with editor content
-      const form = document.querySelector('form'); // adjust if multiple forms
+      const form = document.querySelector('form');
       if (form) {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
           const content = quill.root.innerHTML;
           document.getElementById('contentInput').value = content;
-          // form submits normally with rich HTML in 'content' field
         });
       }
     });
   </script>
+
   <!-- Footer -->
   <footer class="bg-dark text-white text-center py-3 mt-5">
     <div class="container">
@@ -322,4 +634,5 @@
     </div>
   </footer>
 </body>
+
 </html>

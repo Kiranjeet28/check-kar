@@ -1,129 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Login | InfoCascade</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --primary-color: #4e73df;
+      --primary-dark: #3a5bc7;
       --secondary-color: #2c3e50;
       --accent-color: #e74c3c;
+      --ink: #1f2a37;
+      --muted: #6b7a90;
+      --line: #e6eaf1;
+      --radius: 18px;
+      --shadow-lg: 0 24px 60px -24px rgba(24, 39, 75, 0.35);
     }
-    
+
     body {
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(900px 500px at 12% -10%, rgba(78, 115, 223, 0.18), transparent 60%),
+        radial-gradient(800px 480px at 100% 110%, rgba(44, 62, 80, 0.16), transparent 60%),
+        #f5f7fb;
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', Tahoma, sans-serif;
+      color: var(--ink);
       min-height: 100vh;
       display: flex;
       align-items: center;
+      -webkit-font-smoothing: antialiased;
     }
-    
-    .login-card {
-      border: none;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      transition: transform 0.3s ease;
-    }
-    
-    .login-card:hover {
-      transform: translateY(-5px);
-    }
-    
-    .card-header {
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: white;
-      text-align: center;
-      padding: 2rem;
-      border-bottom: none;
-    }
-    
-    .card-body {
-      padding: 2rem;
-    }
-    
-    .btn-primary {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
-      padding: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    
-    .btn-primary:hover {
-      background-color: #3a5bc7;
-      border-color: #3a5bc7;
-    }
-    
-    .form-control {
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-    }
-    
-    .form-control:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
-    }
-    
+
     .home-btn {
       position: absolute;
-      top: 20px;
-      left: 20px;
+      top: 24px;
+      left: 24px;
       z-index: 1000;
+      border-radius: 999px;
+      padding: 0.5rem 1.1rem;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--secondary-color);
+      backdrop-filter: blur(8px);
+      text-decoration: none;
+      transition: all 0.25s ease;
     }
-    
+
+    .home-btn:hover {
+      background: #fff;
+      color: var(--primary-color);
+      transform: translateX(-2px);
+    }
+
+    .login-card {
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      text-align: center;
+      padding: 2.4rem 2rem;
+      border-bottom: none;
+    }
+
+    .brand-badge {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1rem;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.16);
+      font-size: 1.35rem;
+    }
+
+    .card-header h3 {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-header p {
+      opacity: 0.82;
+      font-size: 0.92rem;
+    }
+
+    .card-body {
+      padding: 2.25rem 2rem 2rem;
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--secondary-color);
+      margin-bottom: 0.45rem;
+    }
+
+    .form-control {
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      background: #fff;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(78, 115, 223, 0.15);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      border: none;
+      padding: 0.85rem;
+      border-radius: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      box-shadow: 0 12px 24px -12px rgba(78, 115, 223, 0.75);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px -12px rgba(78, 115, 223, 0.85);
+    }
+
     .input-icon {
       position: relative;
     }
-    
-    .input-icon i {
+
+    .input-icon i.field-icon {
       position: absolute;
       left: 15px;
       top: 50%;
       transform: translateY(-50%);
-      color: #6c757d;
+      margin-top: 15px;
+      color: var(--muted);
+      font-size: 0.9rem;
     }
-    
+
     .input-icon input {
-      padding-left: 40px;
+      padding-left: 42px;
+    }
+
+    .secure-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 1.25rem;
+    }
+
+    #loginError {
+      font-size: 0.88rem;
+      font-weight: 600;
     }
   </style>
 </head>
+
 <body>
 
-  <a href="/" class="btn btn-outline-primary home-btn">
+  <a href="/" class="home-btn">
     <i class="fas fa-arrow-left me-2"></i>Back to Home
   </a>
 
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-5">
+      <div class="col-md-5 col-lg-4">
         <div class="card login-card">
           <div class="card-header">
-            <h3><i class="fas fa-lock me-2"></i>Admin Portal</h3>
+            <div class="brand-badge"><i class="fas fa-lock"></i></div>
+            <h3>Admin Portal</h3>
             <p class="mb-0">Sign in to manage notices</p>
           </div>
           <div class="card-body">
             <form id="adminLoginForm" autocomplete="on">
               <input type="hidden" name="_csrf" id="csrfToken" value="<%= csrfToken %>">
-              <div class="mb-4 input-icon">
-                <label for="email" class="form-label fw-bold">Email Address</label>
-                <i class="fas fa-envelope"></i>
-                <input type="email" name="email" class="form-control" id="email" placeholder=" Email" required />
+              <div class="mb-3 input-icon">
+                <label for="email" class="form-label">Email Address</label>
+                <i class="fas fa-envelope field-icon"></i>
+                <input type="email" name="email" class="form-control" id="email" placeholder="you@college.edu"
+                  required />
               </div>
               <div class="mb-4 input-icon">
-                <label for="password" class="form-label fw-bold">Password</label>
-                <i class="fas fa-key"></i>
-                <input type="password" name="password" class="form-control" id="password" placeholder="••••••••" required />
+                <label for="password" class="form-label">Password</label>
+                <i class="fas fa-key field-icon"></i>
+                <input type="password" name="password" class="form-control" id="password" placeholder="••••••••"
+                  required />
               </div>
-              <button type="submit" class="btn btn-primary w-100 mb-3" id="loginBtn">
+              <button type="submit" class="btn btn-primary w-100" id="loginBtn">
                 <i class="fas fa-sign-in-alt me-2"></i>Login
               </button>
-              <div id="loginError" class="text-danger text-center mb-2"></div>
+              <div id="loginError" class="text-danger text-center mt-3"></div>
+              <p class="secure-note">
+                <i class="fas fa-shield-halved me-1"></i>Protected session · expires after inactivity
+              </p>
             </form>
           </div>
         </div>
@@ -133,7 +218,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+    document.getElementById('adminLoginForm').addEventListener('submit', async function (e) {
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
@@ -142,7 +227,7 @@
       const btn = document.getElementById('loginBtn');
       errorDiv.textContent = '';
       btn.disabled = true;
-      btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Logging in...';
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Logging in...';
       try {
         const res = await fetch('/admin/login', {
           method: 'POST',
@@ -166,4 +251,5 @@
     });
   </script>
 </body>
+
 </html>
