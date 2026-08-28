@@ -313,13 +313,9 @@
     document.addEventListener('DOMContentLoaded', function () {
       // Live data source (GitHub raw) -- file names must match the repository exactly.
       const DATA_BASE = 'https://raw.githubusercontent.com/Kiranjeet28/infocascade-data/main/web';
+      const REPO_API_BASE = 'https://api.github.com/repos/Kiranjeet28/infocascade-data/contents/web';
 
-      // Verified files in /web:            timetable_appliedscience.json, timetable_bca.json,
-      // timetable_civil.json, timetable_cse.json, timetable_ece.json, timetable_electrical.json,
-      // timetable_mechanical.json
-      // Verified files in /web/group:      appliedscience.json, bca.json, civil.json, cse.json,
-      // ece.json, electrical.json, it.json, mechanical.json
-      const DEPARTMENTS = [
+      const FALLBACK_DEPARTMENTS = [
         { key: 'cse', label: 'CSE', timetableFile: 'timetable_cse.json', groupFile: 'group/cse.json' },
         { key: 'it', label: 'IT', timetableFile: null, groupFile: 'group/it.json' },
         { key: 'ece', label: 'ECE', timetableFile: 'timetable_ece.json', groupFile: 'group/ece.json' },
@@ -330,7 +326,9 @@
         { key: 'bca', label: 'BCA', timetableFile: 'timetable_bca.json', groupFile: 'group/bca.json' }
       ];
 
-      const currentUser =  JSON.stringify(currentUser || null) ;
+      const DEPARTMENTS = [...FALLBACK_DEPARTMENTS];
+
+      const currentUser = <% - JSON.stringify(currentUser || null) %>;
       const userLockedTimetable = Boolean(currentUser && currentUser.department && currentUser.group);
       const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -363,6 +361,53 @@
         const payload = await response.json();
         remoteCache[fileName] = payload;
         return payload;
+      }
+
+      function toDisplayLabel(key) {
+        return String(key || '')
+          .replace(/([a-z])([A-Z])/g, '$1 $2')
+          .replace(/[_-]+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .replace(/\b\w/g, (match) => match.toUpperCase());
+      }
+
+      async function loadDepartmentCatalog() {
+        try {
+          const response = await fetch(`${REPO_API_BASE}/group`, {
+            headers: {
+              Accept: 'application/vnd.github+json',
+              'User-Agent': 'InfoCascade-App'
+            }
+          });
+
+          if (!response.ok) throw new Error('Unable to fetch department catalog');
+
+          const entries = await response.json();
+          const groupFiles = Array.isArray(entries)
+            ? entries.filter((entry) => entry && entry.type === 'file' && /\.json$/i.test(entry.name)).map((entry) => entry.name.replace(/\.json$/i, ''))
+            : [];
+
+          if (!groupFiles.length) return;
+
+          const orderedKeys = [...new Set([...groupFiles, ...FALLBACK_DEPARTMENTS.map((department) => department.key)])];
+          const sortedDepartments = orderedKeys
+            .map((key) => {
+              const fallback = FALLBACK_DEPARTMENTS.find((department) => department.key === key) || null;
+              return {
+                key,
+                label: fallback ? fallback.label : toDisplayLabel(key),
+                timetableFile: fallback ? fallback.timetableFile : null,
+                groupFile: `group/${key}.json`
+              };
+            })
+            .filter((department) => groupFiles.includes(department.key));
+
+          DEPARTMENTS.splice(0, DEPARTMENTS.length, ...sortedDepartments);
+        } catch (error) {
+          console.warn('Department catalog fallback used:', error);
+          DEPARTMENTS.splice(0, DEPARTMENTS.length, ...FALLBACK_DEPARTMENTS);
+        }
       }
 
       function buildDaysFromClasses(classes) {
@@ -566,10 +611,18 @@
       });
 
       async function bootTimetableSection() {
+        await loadDepartmentCatalog();
+
         const userDepartment = currentUser && currentUser.department ? findDepartment(currentUser.department) : null;
-        activeDepartmentKey = (userLockedTimetable && userDepartment ? userDepartment.key : DEPARTMENTS[0].key);
+        activeDepartmentKey = (userLockedTimetable && userDepartment ? userDepartment.key : DEPARTMENTS[0]?.key || null);
         renderDepartmentSwitcher();
-        await loadGroupsForDepartment();
+        if (activeDepartmentKey) {
+          await loadGroupsForDepartment();
+        } else {
+          groupSelector.innerHTML = '<option value="">No departments available</option>';
+          dayTabs.innerHTML = '';
+          dayPeriodList.innerHTML = '<div class="alert alert-warning border-0 rounded-4">No departments are available from the repository.</div>';
+        }
         if (userLockedTimetable) groupSelector.disabled = true;
       }
 
