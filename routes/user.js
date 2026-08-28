@@ -29,15 +29,17 @@ function requireUserJWT(req, res, next) {
   }
 }
 
+const GITHUB_DATA_BASE = 'https://raw.githubusercontent.com/Kiranjeet28/infocascade-data/main/web';
+
 const DEPARTMENT_CONFIG = [
-  { key: 'appliedscience', label: 'Applied Science', file: 'timetable_appliedscience.json' },
-  { key: 'bca', label: 'BCA', file: 'timetable_bca.json' },
-  { key: 'civil', label: 'Civil Engineering', file: 'timetable_civil.json' },
-  { key: 'cse', label: 'Computer Science & Engineering', file: 'timetable_cse.json' },
-  { key: 'ece', label: 'Electronics & Communication Engineering', file: 'timetable_ece.json' },
-  { key: 'electrical', label: 'Electrical Engineering', file: 'timetable_electrical.json' },
-  { key: 'it', label: 'Information Technology', file: 'timetable_it.json' },
-  { key: 'mechanical', label: 'Mechanical Engineering', file: 'timetable_mechanical.json' }
+  { key: 'appliedscience', label: 'Applied Science', file: 'timetable_appliedscience.json', groupFile: 'group/appliedscience.json' },
+  { key: 'bca', label: 'BCA', file: 'timetable_bca.json', groupFile: 'group/bca.json' },
+  { key: 'civil', label: 'Civil Engineering', file: 'timetable_civil.json', groupFile: 'group/civil.json' },
+  { key: 'cse', label: 'Computer Science & Engineering', file: 'timetable_cse.json', groupFile: 'group/cse.json' },
+  { key: 'ece', label: 'Electronics & Communication Engineering', file: 'timetable_ece.json', groupFile: 'group/ece.json' },
+  { key: 'electrical', label: 'Electrical Engineering', file: 'timetable_electrical.json', groupFile: 'group/electrical.json' },
+  { key: 'it', label: 'Information Technology', file: 'timetable_it.json', groupFile: 'group/it.json' },
+  { key: 'mechanical', label: 'Mechanical Engineering', file: 'timetable_mechanical.json', groupFile: 'group/mechanical.json' }
 ];
 
 function readTimetableFile(fileName) {
@@ -132,16 +134,44 @@ function fetchDepartments() {
   return DEPARTMENT_CONFIG.map(({ key, label }) => ({ key, label }));
 }
 
-function fetchGroups(departmentKey) {
+async function fetchRemoteJson(filePath) {
+  const response = await fetch(`${GITHUB_DATA_BASE}/${filePath}`, {
+    headers: {
+      'User-Agent': 'InfoCascade-App'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Unable to load ${filePath}`);
+  }
+
+  return response.json();
+}
+
+async function fetchGroups(departmentKey) {
   const department = getDepartmentByKey(departmentKey);
   if (!department) return [];
+
+  try {
+    const payload = await fetchRemoteJson(department.groupFile);
+    const groups = Array.isArray(payload) ? payload : (Array.isArray(payload.groups) ? payload.groups : []);
+    if (groups.length) return groups;
+  } catch (error) {
+    // Fall through to timetable groups if the repository group file is unavailable.
+  }
 
   try {
     const payload = readTimetableFile(department.file);
     const timetableMap = payload && payload.timetable ? payload.timetable : {};
     return Object.keys(timetableMap);
   } catch (error) {
-    return [];
+    try {
+      const payload = await fetchRemoteJson(department.file);
+      const timetableMap = payload && payload.timetable ? payload.timetable : {};
+      return Object.keys(timetableMap);
+    } catch (remoteError) {
+      return [];
+    }
   }
 }
 
@@ -325,8 +355,10 @@ router.post('/register',
     }
     const { name, password, urn, crn, group, department } = req.body;
     const email = String(req.body.email).trim().toLowerCase();
-    const groups = getGroupsByDepartment(department);
-    if (!groups.includes(group)) {
+    const normalizedGroup = String(group || '').trim();
+    const groups = (await getGroupsByDepartment(department)).map((item) => String(item).trim());
+    const isValidGroup = groups.some((item) => item.toLowerCase() === normalizedGroup.toLowerCase());
+    if (!isValidGroup) {
       return res.status(400).json({ error: 'Selected group does not belong to selected department.' });
     }
     const existing = await User.findOne({ email });
@@ -425,9 +457,9 @@ router.get('/api/departments', (req, res) => {
   res.json({ departments: getDepartmentOptions() });
 });
 
-router.get('/api/groups/:department', (req, res) => {
+router.get('/api/groups/:department', async (req, res) => {
   const departmentKey = req.params.department;
-  const groups = getGroupsByDepartment(departmentKey);
+  const groups = await getGroupsByDepartment(departmentKey);
   res.json({ department: departmentKey, groups });
 });
 

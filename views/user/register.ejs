@@ -222,7 +222,8 @@
   <script>
     // Live data source (GitHub raw) -- file names verified against the repository.
     const DATA_BASE = 'https://raw.githubusercontent.com/Kiranjeet28/infocascade-data/main/web';
-    const DEPARTMENTS = [
+    const REPO_API_BASE = 'https://api.github.com/repos/Kiranjeet28/infocascade-data/contents/web';
+    const FALLBACK_DEPARTMENTS = [
       { key: 'cse', label: 'CSE', groupFile: 'group/cse.json' },
       { key: 'it', label: 'IT', groupFile: 'group/it.json' },
       { key: 'ece', label: 'ECE', groupFile: 'group/ece.json' },
@@ -232,6 +233,11 @@
       { key: 'appliedscience', label: 'Applied Science', groupFile: 'group/appliedscience.json' },
       { key: 'bca', label: 'BCA', groupFile: 'group/bca.json' }
     ];
+    const DEPARTMENTS = [...FALLBACK_DEPARTMENTS];
+
+    function normalizeGroupName(value) {
+      return String(value || '').trim().replace(/\s+/g, '').toLowerCase();
+    }
 
     function isValidGmailAddress(email) {
       var t = email.trim();
@@ -254,7 +260,36 @@
     const departmentSelect = document.getElementById('department');
     const groupSelect = document.getElementById('group');
 
-    document.addEventListener('DOMContentLoaded', function () {
+    async function loadDepartmentCatalog() {
+      try {
+        const response = await fetch(`${REPO_API_BASE}/group`, {
+          headers: {
+            Accept: 'application/vnd.github+json',
+            'User-Agent': 'InfoCascade-App'
+          }
+        });
+
+        if (!response.ok) throw new Error('Unable to fetch department catalog');
+
+        const entries = await response.json();
+        const groupFiles = Array.isArray(entries)
+          ? entries.filter((entry) => entry && entry.type === 'file' && /\.json$/i.test(entry.name)).map((entry) => entry.name.replace(/\.json$/i, ''))
+          : [];
+
+        if (!groupFiles.length) return;
+
+        const orderedKeys = [...new Set([...groupFiles, ...FALLBACK_DEPARTMENTS.map((department) => department.key)])];
+        DEPARTMENTS.splice(0, DEPARTMENTS.length, ...orderedKeys.map((key) => ({
+          key,
+          label: FALLBACK_DEPARTMENTS.find((department) => department.key === key)?.label || key,
+          groupFile: `group/${key}.json`
+        })).filter((department) => groupFiles.includes(department.key)));
+      } catch (error) {
+        DEPARTMENTS.splice(0, DEPARTMENTS.length, ...FALLBACK_DEPARTMENTS);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async function () {
       var urnEl = document.getElementById('urn');
       var crnEl = document.getElementById('crn');
       if (urnEl) digitsOnly(urnEl, 7);
@@ -276,14 +311,16 @@
         });
       }
 
+      await loadDepartmentCatalog();
       departmentSelect.innerHTML = '<option value="">Select department</option>' +
         DEPARTMENTS.map((d) => `<option value="${d.key}">${d.label}</option>`).join('');
     });
 
     async function loadGroups(departmentKey) {
       const department = DEPARTMENTS.find((d) => d.key === departmentKey);
-      groupSelect.innerHTML = '<option value="">Loading groups...</option>';
       groupSelect.disabled = true;
+      groupSelect.innerHTML = '<option value="">Loading groups...</option>';
+      groupSelect.value = '';
       if (!department) return;
       try {
         const res = await fetch(`${DATA_BASE}/${department.groupFile}`, { cache: 'no-cache' });
@@ -294,22 +331,26 @@
           groupSelect.innerHTML = '<option value="">No groups found</option>';
           return;
         }
+
+        const normalizedGroups = groups.map((group) => String(group).trim());
         groupSelect.innerHTML = '<option value="">Select group</option>' +
-          groups.map((group) => `<option value="${group}">${group}</option>`).join('');
+          normalizedGroups.map((group) => `<option value="${group}">${group}</option>`).join('');
         groupSelect.disabled = false;
+        groupSelect.value = '';
       } catch (error) {
         groupSelect.innerHTML = '<option value="">Unable to load groups</option>';
       }
     }
 
-    departmentSelect.addEventListener('change', function () {
+    departmentSelect.addEventListener('change', async function () {
       const departmentKey = this.value;
       if (!departmentKey) {
         groupSelect.innerHTML = '<option value="">Select department first</option>';
         groupSelect.disabled = true;
+        groupSelect.value = '';
         return;
       }
-      loadGroups(departmentKey);
+      await loadGroups(departmentKey);
     });
 
     document.getElementById('registerForm').addEventListener('submit', async function (e) {
