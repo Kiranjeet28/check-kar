@@ -346,12 +346,25 @@
       let activeDay = 'Monday';
 
       function normalizeKey(value) {
-        return String(value || '').toLowerCase().replace(/[^a-z]/g, '');
+        return String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+      }
+
+      function normalizeGroupValue(value) {
+        return String(value || '').trim().replace(/\s+/g, ' ').replace(/&/g, 'and').toLowerCase();
       }
 
       function findDepartment(key) {
+        if (!key) return null;
         const wanted = normalizeKey(key);
-        return DEPARTMENTS.find((department) => normalizeKey(department.key) === wanted) || null;
+        return DEPARTMENTS.find((department) => {
+          const values = [department.key, department.label];
+          return values.some((value) => {
+            const normalizedValue = normalizeKey(value);
+            return normalizedValue === wanted
+              || normalizedValue.includes(wanted)
+              || wanted.includes(normalizedValue);
+          });
+        }) || null;
       }
 
       async function fetchJson(fileName) {
@@ -570,11 +583,13 @@
 
           groupSelector.innerHTML = groups.map((group) => `<option value="${group}">${group}</option>`).join('');
           groupSelector.disabled = userLockedTimetable;
-          const preferredGroup = currentUser && currentUser.group && groups.includes(currentUser.group)
-            ? currentUser.group
-            : groups[0];
+
+          const userPreferredGroup = currentUser && currentUser.group
+            ? groups.find((group) => normalizeGroupValue(group) === normalizeGroupValue(currentUser.group))
+            : null;
+          const preferredGroup = userPreferredGroup || groups[0];
           activeGroupName = preferredGroup;
-          groupSelector.value = activeGroupName;
+          groupSelector.value = preferredGroup;
           await loadTimetableForSelection();
         } catch (error) {
           groupSelector.innerHTML = '<option value="">Unable to load groups</option>';
@@ -584,10 +599,6 @@
       }
 
       function renderDepartmentSwitcher() {
-        if (userLockedTimetable) {
-          departmentSwitcher.innerHTML = '';
-          return;
-        }
         departmentSwitcher.innerHTML = DEPARTMENTS.map((department) => `
           <button type="button" class="department-chip ${normalizeKey(department.key) === normalizeKey(activeDepartmentKey) ? 'active' : ''}" data-department="${department.key}">
             ${department.label}
@@ -614,7 +625,7 @@
         await loadDepartmentCatalog();
 
         const userDepartment = currentUser && currentUser.department ? findDepartment(currentUser.department) : null;
-        activeDepartmentKey = (userLockedTimetable && userDepartment ? userDepartment.key : DEPARTMENTS[0]?.key || null);
+        activeDepartmentKey = userDepartment ? userDepartment.key : DEPARTMENTS[0]?.key || null;
         renderDepartmentSwitcher();
         if (activeDepartmentKey) {
           await loadGroupsForDepartment();
