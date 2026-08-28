@@ -128,6 +128,23 @@ function loadDepartmentTimetables() {
   });
 }
 
+function fetchDepartments() {
+  return DEPARTMENT_CONFIG.map(({ key, label }) => ({ key, label }));
+}
+
+function fetchGroups(departmentKey) {
+  const department = getDepartmentByKey(departmentKey);
+  if (!department) return [];
+
+  try {
+    const payload = readTimetableFile(department.file);
+    const timetableMap = payload && payload.timetable ? payload.timetable : {};
+    return Object.keys(timetableMap);
+  } catch (error) {
+    return [];
+  }
+}
+
 function getDepartmentOptions() {
   return fetchDepartments();
 }
@@ -160,7 +177,14 @@ function getDepartmentByKey(departmentKey) {
 function buildDepartmentTimetableForGroup(departmentKey, requestedGroup) {
   const department = getDepartmentByKey(departmentKey);
   if (!department) return null;
-  const payload = readTimetableFile(department.file);
+
+  let payload;
+  try {
+    payload = readTimetableFile(department.file);
+  } catch (error) {
+    return null;
+  }
+
   const timetableMap = payload.timetable || {};
   const groupNames = Object.keys(timetableMap);
   const matchedGroup = groupNames.find((name) => name.toLowerCase() === String(requestedGroup || '').toLowerCase()) || null;
