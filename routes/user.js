@@ -8,7 +8,6 @@ const bcrypt = require('bcryptjs');
 const { body, validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path');
-const { fetchDepartments, fetchGroups } = require('../utils/departmentUtils');
 const TIMETABLE_CACHE_TTL_MS = 5 * 60 * 1000;
 const timetableCache = new Map();
 
